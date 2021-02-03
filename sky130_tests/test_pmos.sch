@@ -1,4 +1,4 @@
-v {xschem version=2.9.8 file_version=1.2
+v {xschem version=2.9.9 file_version=1.2 
 
 * Copyright 2020 Stefan Frederik Schippers
 * 
@@ -20,10 +20,8 @@ K {}
 V {}
 S {}
 E {}
-T {Disabled
-No Model} 1910 -550 0 0 0.3 0.3 {layer=7}
-T {Ctrl-Click
-to open link} 10 -340 0 0 0.3 0.3 {layer=11}
+T {Need to include: 
+sky130_fd_pr__pfet_20v0__tt_discrete.corner.spice} 1836.25 -533.75 0 0 0.2 0.2 {layer=7}
 N 680 -490 680 -470 {lab=S}
 N 680 -440 700 -440 {lab=B}
 N 620 -440 640 -440 {lab=G1v8}
@@ -84,13 +82,14 @@ vs s 0 0
 vd D1v8 0 0
 vb b 0 0
 .control
+save all
 dc vd 0 -1.8 -0.01 vg 0 -1.8 -0.2
 plot all.vd1#branch vs D1v8
 plot all.vd2#branch vs D1v8
 plot all.vd3#branch vs D1v8
 plot all.vd4#branch vs D10v5
 plot all.vd5#branch vs D16v0
-
+plot all.vd6#branch vs D20v0
 .endc
 " }
 C {devices/lab_pin.sym} 540 -90 0 0 {name=p15 lab=D1v8}
@@ -129,10 +128,6 @@ C {devices/ammeter.sym} 1180 -360 0 1 {name=Vd3}
 C {sky130_fd_pr/pfet_01v8_hvt.sym} 1160 -440 0 0 {name=M3
 L=0.15
 W=1
-ad="'W * 0.29'" pd="'W + 2 * 0.29'"
-as="'W * 0.29'" ps="'W + 2 * 0.29'"
-nrd=0 nrs=0
-sa=0 sb=0 sd=0
 nf=1 mult=1
 model=pfet_01v8_hvt
 spiceprefix=X
@@ -144,10 +139,6 @@ C {devices/ammeter.sym} 1430 -360 0 1 {name=Vd4}
 C {sky130_fd_pr/pfet_g5v0d10v5.sym} 1410 -440 0 0 {name=M4
 L=0.5
 W=1
-ad="'W * 0.29'" pd="'W + 2 * 0.29'"
-as="'W * 0.29'" ps="'W + 2 * 0.29'"
-nrd=0 nrs=0
-sa=0 sb=0 sd=0
 nf=1 mult=1
 model=pfet_g5v0d10v5
 spiceprefix=X
@@ -155,10 +146,6 @@ spiceprefix=X
 C {sky130_fd_pr/pfet_01v8_lvt.sym} 660 -440 0 0 {name=M1
 L=0.35
 W=1
-ad="'W * 0.29'" pd="'W + 2 * 0.29'"
-as="'W * 0.29'" ps="'W + 2 * 0.29'"
-nrd=0 nrs=0
-sa=0 sb=0 sd=0
 nf=1 mult=1
 model=pfet_01v8_lvt
 spiceprefix=X
@@ -166,10 +153,6 @@ spiceprefix=X
 C {sky130_fd_pr/pfet_01v8.sym} 910 -440 0 0 {name=M2
 L=0.15
 W=1
-ad="'W * 0.29'" pd="'W + 2 * 0.29'"
-as="'W * 0.29'" ps="'W + 2 * 0.29'"
-nrd=0 nrs=0
-sa=0 sb=0 sd=0
 nf=1 mult=1
 model=pfet_01v8
 spiceprefix=X
@@ -181,10 +164,6 @@ C {devices/ammeter.sym} 1690 -360 0 1 {name=Vd5}
 C {sky130_fd_pr/pfet_g5v0d16v0.sym} 1670 -440 0 0 {name=M5
 L=0.66
 W=5.0
-ad="'W * 0.29'" pd="'W + 2 * 0.29'"
-as="'W * 0.29'" ps="'W + 2 * 0.29'"
-nrd=0 nrs=0
-sa=0 sb=0 sd=0
 nf=1 mult=1
 model=pfet_g5v0d16v0
 spiceprefix=X
@@ -205,30 +184,19 @@ C {devices/lab_pin.sym} 1350 -590 0 1 {name=p52 lab=0}
 C {devices/lab_pin.sym} 1350 -670 0 1 {name=p53 lab=D20v0}
 C {devices/lab_pin.sym} 1310 -600 0 0 {name=p54 lab=0}
 C {sky130_fd_pr/pfet_20v0.sym} 1930 -440 0 0 {name=M6
-L=1
+L=0.5
 W=30
-ad="'W * 0.29'" pd="'W + 2 * 0.29'"
-as="'W * 0.29'" ps="'W + 2 * 0.29'"
-nrd=0 nrs=0
-sa=0 sb=0 sd=0
 nf=1 mult=1
 model=pfet_20v0
-spice_ignore=true
 spiceprefix=X
 }
 C {devices/lab_pin.sym} 1950 -490 2 0 {name=p48 lab=S}
 C {devices/lab_pin.sym} 1970 -440 0 1 {name=p49 lab=B}
 C {devices/ammeter.sym} 1950 -360 0 1 {name=Vd6}
 C {devices/lab_pin.sym} 1890 -440 0 0 {name=p55 lab=G5v0}
-C {devices/launcher.sym} 100 -290 0 0 {name=h1
-descr="Simulation done
-using a patched 
-sky130 primitive directory,
-see patch file" 
-url="https://github.com/StefanSchippers/xschem_sky130/blob/main/sky130_fd_pr.patch"}
-C {devices/code.sym} 60 -200 0 0 {name=TT_MODELS
+C {devices/code.sym} 50 -190 0 0 {name=TT_MODELS
 only_toplevel=true
-format=tcleval(@value\\)
+format="tcleval( @value )"
 value="
 .include \\\\$::SKYWATER_MODELS\\\\/cells/nfet_01v8/sky130_fd_pr__nfet_01v8__tt.corner.spice
 .include \\\\$::SKYWATER_MODELS\\\\/cells/nfet_01v8_lvt/sky130_fd_pr__nfet_01v8_lvt__tt.corner.spice
@@ -264,4 +232,10 @@ value="
 .include \\\\$::SKYWATER_MODELS\\\\/models/all.spice
 * Corner
 .include \\\\$::SKYWATER_MODELS\\\\/models/corners/tt/rf.spice
+"}
+C {devices/code.sym} 240 -190 0 0 {name=pfet_20v0_MODEL
+only_toplevel=true
+format="tcleval( @value )"
+value="
+.include \\\\$::SKYWATER_MODELS\\\\/cells/pfet_20v0/sky130_fd_pr__pfet_20v0__tt_discrete.corner.spice
 "}

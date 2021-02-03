@@ -1,4 +1,4 @@
-v {xschem version=2.9.8 file_version=1.2
+v {xschem version=2.9.9 file_version=1.2 
 
 * Copyright 2020 Stefan Frederik Schippers
 * 
@@ -46,8 +46,6 @@ T {NGSPICE MONTE CARLO SIMULATION} 1430 -290 0 0 0.8 0.8 {}
 T {Offset-compensated comparator. Detects +/- 2mv differential signal on PLUS, MINUS.
 Output on SAOUT
 Gaussian Threshold variation is added to all MOS transistors.} 1330 -220 0 0 0.6 0.6 {}
-T {Ctrl-Click
-to open link} 870 -170 0 0 0.3 0.3 {layer=11}
 N 120 -480 120 -460 {lab=TEMPERAT}
 N 290 -1090 320 -1090 {lab=VSS}
 N 290 -1060 290 -1030 {lab=VSS}
@@ -227,7 +225,7 @@ value="* .option SCALE=1e-6
 * selection based on W/NF instead of W
 .option wnflag=1 
 
-.param VCC=1.8
+* .param VCC=1.8
 .param VCCGAUSS=agauss(1.8, 0.05, 1)
 .param VCC=VCCGAUSS
 .param VDL='VCC/2+0.2'
@@ -247,12 +245,12 @@ value="* .option SCALE=1e-6
 
 .control
   let run=1
-  
   dowhile run <= 20
     if run > 1
       reset
       set appendwrite
     end
+    save all
     * save saout cal i(vvcc) en plus minus
     tran 0.1n 300n uic
     write test_comparator.raw
@@ -623,15 +621,23 @@ value=15f
 footprint=1206
 device="ceramic capacitor"}
 C {devices/lab_pin.sym} 1930 -1020 0 0 {name=p7 lab=VCC}
-C {devices/launcher.sym} 960 -120 0 0 {name=h1
-descr="Simulation done
-using a patched 
-sky130 primitive directory,
-see patch file" 
-url="https://github.com/StefanSchippers/xschem_sky130/blob/main/sky130_fd_pr.patch"}
+C {devices/launcher.sym} 1150 -310 0 0 {name=h3
+descr="Load file into gaw" 
+comment="
+  This launcher gets raw filename from current schematic using 'xschem get schname'
+  and stripping off path and suffix.  It then loads raw file into gaw.
+  This allow to use it in any schematic without changes.
+"
+tclcommand="
+set rawfile [file tail [file rootname [xschem get schname]]].raw
+gaw_cmd \\"tabledel $rawfile
+load $netlist_dir/$rawfile
+table_set $rawfile\\"
+unset rawfile"
+}
 C {devices/code.sym} 720 -160 0 0 {name=TT_MODELS
 only_toplevel=true
-format=tcleval(@value\\)
+format="tcleval( @value )"
 value="
 .include \\\\$::SKYWATER_MODELS\\\\/cells/nfet_01v8/sky130_fd_pr__nfet_01v8__tt.corner.spice
 .include \\\\$::SKYWATER_MODELS\\\\/cells/nfet_01v8_lvt/sky130_fd_pr__nfet_01v8_lvt__tt.corner.spice
@@ -668,17 +674,3 @@ value="
 * Corner
 .include \\\\$::SKYWATER_MODELS\\\\/models/corners/tt/rf.spice
 "}
-C {devices/launcher.sym} 1150 -310 0 0 {name=h3
-descr="Load file into gaw" 
-comment="
-  This launcher gets raw filename from current schematic using 'xschem get schname'
-  and stripping off path and suffix.  It then loads raw file into gaw.
-  This allow to use it in any schematic without changes.
-"
-tclcommand="
-set rawfile [file tail [file rootname [xschem get schname]]].raw
-gaw_cmd \\"tabledel $rawfile
-load $netlist_dir/$rawfile
-table_set $rawfile\\"
-unset rawfile"
-}
